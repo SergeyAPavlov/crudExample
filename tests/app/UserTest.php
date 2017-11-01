@@ -49,4 +49,23 @@ class UserTest extends TestCase
         $this->assertFalse($create->done);
     }
 
+    public function testUpdate()
+    {
+        $app = new crudExample\App();
+        $app->initBase();
+        $user = new UserOps($app);
+        $fields =  ['id'=>2, "login"=>'user'.uniqid(), "password"=>"password", "fio"=>'Some FIO', "email"=>'test@test.ru', "rights"=>0];
+        $create = $user->update($fields);
+        $this->assertTrue($create->done);
+    }
+
+    public function testDelete()
+    {
+        $app = new crudExample\App();
+        $app->initBase();
+        $user = new UserOps($app);
+        $delete = $user->delete(5);
+        $this->assertTrue($delete->done);
+    }
+
 }

@@ -52,6 +52,7 @@ class UserOps
         $result = $this->db->query($query);
         if (empty($result)){
             $this->done = false;
+            $this->errors = $this->db->error_list;
             return $this;
         }
         $fields = $result->fetch_assoc();
@@ -73,7 +74,7 @@ class UserOps
         else {
             $this->fields = $fields;
         }
-        if (is_null($fields)){
+        if (!is_array($fields)){
             $this->done = false;
             $this->errors = 'Данные для создаваемого пользователя не заданы';
             return $this;
@@ -92,6 +93,64 @@ class UserOps
         }
         return $this;
 
+    }
+    /**
+     * @param bool|array $fields
+     * @return $this
+     */
+    public function update($fields = false)
+    {
+        if ($fields === false){
+            $fields = $this->fields;
+        }
+        else {
+            $this->fields = $fields;
+        }
+        if (!is_array($fields)){
+            $this->done = false;
+            $this->errors = 'Данные для обновляемого пользователя не заданы';
+            return $this;
+        }
+        $keys = array_keys($fields);
+
+        $values = '';
+        foreach ($fields as $key=>$value){
+            $values .= "`$key`='$value',";
+        }
+        $values = mb_substr($values, 0, mb_strlen($values)-1 );
+
+        $query = 'UPDATE '.$this->table.' SET '.$values."WHERE id='".$fields['id']."'";
+            " VALUES ('".implode("', '",$fields )."'".')';
+
+        /** @var \mysqli_result $result */
+        $result = $this->db->query($query);
+        $this->done = true;
+        if (empty($result)) {
+            $this->done = false;
+            $this->errors = $this->db->error_list;
+        }
+        return $this;
+
+    }
+
+    /**
+     * @param int $id
+     * @return $this
+     */
+    public function delete($id)
+    {
+        $query = 'DELETE from '.$this->table." WHERE `id` = ".$id;
+        /** @var \mysqli_result $result */
+        $result = $this->db->query($query);
+        if (empty($result)){
+            $this->done = false;
+            $this->errors = $this->db->error_list;
+            return $this;
+        }
+        $fields = null;
+        $this->fields = $fields;
+        $this->done = true;
+        return $this;
     }
 
 
