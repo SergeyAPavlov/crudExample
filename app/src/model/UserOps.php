@@ -1,7 +1,7 @@
 <?php
 /**
  * Created by PhpStorm.
- * User: Sergey Pavlov
+ * UserOps: Sergey Pavlov
  * Date: 01.11.2017
  * Time: 17:57
  */
@@ -12,12 +12,14 @@ namespace crudExample\Model;
 use crudExample\App;
 
 /**
- * Class User
+ * Class UserOps
  * @package crudExample\Model
  */
-class User
+class UserOps
 {
     public $fields;
+    public $done;
+    public $errors;
 
     private $db;
     private $app;
@@ -27,7 +29,7 @@ class User
 
 
     /**
-     * User constructor.
+     * UserOps constructor.
      * @param App $app
      */
     public function __construct(App $app)
@@ -38,21 +40,44 @@ class User
 
     }
 
+    /**
+     * @param int $id
+     * @return $this
+     */
     public function read($id)
     {
 
         $query = 'SELECT * from '.$this->table." WHERE `id` = '".$id."'";
         /** @var \mysqli_result $result */
         $result = $this->db->query($query);
-        if (empty($result)) return false;
+        if (empty($result)){
+            $this->done = false;
+            return $this;
+        }
         $fields = $result->fetch_assoc();
         $this->fields = $fields;
+        $this->done = true;
         return $this;
 
     }
 
-    public function create($fields)
+    /**
+     * @param bool|array $fields
+     * @return $this
+     */
+    public function create($fields = false)
     {
+        if ($fields === false){
+            $fields = $this->fields;
+        }
+        else {
+            $this->fields = $fields;
+        }
+        if (is_null($fields)){
+            $this->done = false;
+            $this->errors = 'Данные для создаваемого пользователя не заданы';
+            return $this;
+        }
         $keys = array_keys($fields);
 
         $query = 'INSERT INTO '.$this->table.' (`'.implode('`, `',$keys ).'`) '.
@@ -60,11 +85,12 @@ class User
 
         /** @var \mysqli_result $result */
         $result = $this->db->query($query);
+        $this->done = true;
         if (empty($result)) {
-            var_dump($this->db->error_list);
-            return false;
+            $this->done = false;
+            $this->errors = $this->db->error_list;
         }
-        return true;
+        return $this;
 
     }
 
