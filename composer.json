@@ -1,0 +1,15 @@
+{
+  "name": "pavlov/crudExample",
+  "description": "simple MVC CRUD example",
+  "minimum-stability": "stable",
+  "license": "proprietary",
+  "authors": [
+    {
+      "name": "Sergey Pavlov",
+      "email": "sclavium@gmail.com"
+    }
+  ],
+  "autoload": {
+    "psr-4": {"crudExample\\": "app/src/"}
+  }
+}
