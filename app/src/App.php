@@ -15,7 +15,7 @@ class App extends Config
     /** @var  \mysqli */
     private $connection;
 
-    public function init()
+    public function initBase()
     {
         if (is_null($this->connection)){
             $this->connection = new \mysqli($this->dbaseHost, $this->dbaseUser, $this->dbasePassword, $this->dbaseName);
@@ -46,7 +46,7 @@ class App extends Config
 
     public function createEmptyTables()
     {
-        $this->init();
+        $this->initBase();
         $db = $this->connection;
         $result = $db->query('SHOW TABLES');
         if (empty($result->fetch_assoc())){
