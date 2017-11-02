@@ -20,6 +20,7 @@ class UserOps
     public $fields;
     public $done;
     public $errors;
+    public $log;
 
     private $db;
     private $app;
@@ -49,15 +50,11 @@ class UserOps
 
         $query = 'SELECT * from '.$this->table." WHERE `id` = '".$id."'";
         /** @var \mysqli_result $result */
-        $result = $this->db->query($query);
-        if (empty($result)){
-            $this->done = false;
-            $this->errors = $this->db->error_list;
-            return $this;
+        $result = $this->query($query);
+        if ($result){
+            $fields = $result->fetch_assoc();
+            $this->fields = $fields;
         }
-        $fields = $result->fetch_assoc();
-        $this->fields = $fields;
-        $this->done = true;
         return $this;
 
     }
@@ -84,51 +81,31 @@ class UserOps
         $query = 'INSERT INTO '.$this->table.' (`'.implode('`, `',$keys ).'`) '.
         " VALUES ('".implode("', '",$fields )."'".')';
 
-        /** @var \mysqli_result $result */
-        $result = $this->db->query($query);
-        $this->done = true;
-        if (empty($result)) {
-            $this->done = false;
-            $this->errors = $this->db->error_list;
-        }
+        $this->query($query);
         return $this;
 
     }
     /**
-     * @param bool|array $fields
      * @return $this
      */
-    public function update($fields = false)
+    public function update()
     {
-        if ($fields === false){
-            $fields = $this->fields;
-        }
-        else {
-            $this->fields = $fields;
-        }
+
+        $fields = $this->fields;
         if (!is_array($fields)){
             $this->done = false;
             $this->errors = 'Данные для обновляемого пользователя не заданы';
             return $this;
         }
-        $keys = array_keys($fields);
 
         $values = '';
         foreach ($fields as $key=>$value){
             $values .= "`$key`='$value',";
         }
         $values = mb_substr($values, 0, mb_strlen($values)-1 );
-
         $query = 'UPDATE '.$this->table.' SET '.$values."WHERE id='".$fields['id']."'";
-            " VALUES ('".implode("', '",$fields )."'".')';
 
-        /** @var \mysqli_result $result */
-        $result = $this->db->query($query);
-        $this->done = true;
-        if (empty($result)) {
-            $this->done = false;
-            $this->errors = $this->db->error_list;
-        }
+        $this->query($query);
         return $this;
 
     }
@@ -141,18 +118,58 @@ class UserOps
     {
         $query = 'DELETE from '.$this->table." WHERE `id` = ".$id;
         /** @var \mysqli_result $result */
-        $result = $this->db->query($query);
-        if (empty($result)){
-            $this->done = false;
-            $this->errors = $this->db->error_list;
-            return $this;
-        }
-        $fields = null;
-        $this->fields = $fields;
-        $this->done = true;
+
+        $this->query($query);
+        $this->fields = null;
         return $this;
     }
 
+    /**
+     * @param string $query
+     * @return null|\mysqli_result
+     */
+    public function query($query)
+    {
+        $this->log[] = ['query', $query];
+        $flagFail = false;
+        try {
+            $result = $this->db->query($query);
+        } catch (\Throwable $t)
+        {
+            $flagFail = true;
+        }
+
+        if (empty($result) OR !empty($flagFail)){
+            $result = null;
+            $this->done = false;
+            $this->errors = $this->db->error_list;
+            $this->log[] = ['fail', $this->done, $this->errors, ($flagFail? $t : '')];
+        }
+        else {
+            $this->done = true;
+        }
+        return $result;
+    }
+
+    /**
+     * @param string $condition
+     * @return array
+     */
+    public function listTable($condition = '')
+    {
+        if (empty($condition)) {
+            $condition = '1=1';
+        }
+        $query = 'SELECT * from '.$this->table." WHERE ".$condition;
+        /** @var \mysqli_result $result */
+        $result = $this->query($query);
+        $table = [];
+        if (empty($result)) return null;
+        while ($row = $result->fetch_assoc()){
+            $table[] = $row;
+        }
+        return $table;
+    }
 
 
 

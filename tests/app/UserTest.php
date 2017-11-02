@@ -27,6 +27,7 @@ class UserTest extends TestCase
         $user = new UserOps($app);
         $fields = $user->read(1)->fields;
         $this->assertTrue($user->done);
+        $this->assertEquals($fields['login'], 'admin');
     }
 
     public function testCreate()
@@ -54,8 +55,8 @@ class UserTest extends TestCase
         $app = new crudExample\App();
         $app->initBase();
         $user = new UserOps($app);
-        $fields =  ['id'=>2, "login"=>'user'.uniqid(), "password"=>"password", "fio"=>'Some FIO', "email"=>'test@test.ru', "rights"=>0];
-        $create = $user->update($fields);
+        $user->fields =  ['id'=>2, "login"=>'user'.uniqid(), "password"=>"password", "fio"=>'Some FIO', "email"=>'test@test.ru', "rights"=>0];
+        $create = $user->update();
         $this->assertTrue($create->done);
     }
 
@@ -64,8 +65,17 @@ class UserTest extends TestCase
         $app = new crudExample\App();
         $app->initBase();
         $user = new UserOps($app);
-        $delete = $user->delete(5);
+        $delete = $user->delete(6);
         $this->assertTrue($delete->done);
     }
 
+    public function testListTable()
+    {
+        $app = new crudExample\App();
+        $app->initBase();
+        $user = new UserOps($app);
+        $table = $user->listTable();
+        $this->assertTrue($user->done);
+
+    }
 }
