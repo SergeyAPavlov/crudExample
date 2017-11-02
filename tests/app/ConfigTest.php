@@ -19,6 +19,13 @@ class ConfigTest extends TestCase
         $this->assertNotNull($conn, 'соединение не установлено');
     }
 
+    public function testInit()
+    {
+        $app = new crudExample\App();
+        $conn = $app->init()->getConnection();
+        $this->assertNotNull($conn, 'соединение не установлено');
+    }
+
     public function testCreateTables()
     {
         $conf = new crudExample\App();

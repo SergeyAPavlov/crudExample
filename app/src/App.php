@@ -14,6 +14,22 @@ class App extends Config
 
     /** @var  \mysqli */
     private $connection;
+    public $root;
+
+    public function init()
+    {
+
+        $this->root = self::sliceDir(__DIR__, 2);
+        $this->initBase();
+        return $this;
+    }
+
+    public static function sliceDir ($dir, $level)
+    {
+        $pathArray = explode(DIRECTORY_SEPARATOR, $dir);
+        $new = array_slice ( $pathArray, 0, -$level);
+        return implode(DIRECTORY_SEPARATOR, $new);
+    }
 
     public function initBase()
     {
