@@ -23,8 +23,14 @@ class main extends Controller
     }
     public function requestData()
     {
+        echo '*main.requestData:'.$this->route;
+        if ($this->route == 'register'){
+            echo '*регистрация';
+            exit;
+        }
         if (!$this->app->logged){
             $controller = new auth($this->app, 'auth');
+            echo '*controller.auth';
             $this->data['content'] = $controller->requestAll();
         }
         else {
@@ -36,6 +42,6 @@ class main extends Controller
     }
     public function requestView()
     {
-        View::display($this->app, $this->route, $this->data);
+        View::display($this->app, 'main', $this->data);
     }
 }

@@ -47,8 +47,18 @@ class UserOps
      */
     public function read($id)
     {
+        return $this->find('id', $id);
+    }
 
-        $query = 'SELECT * from '.$this->table." WHERE `id` = '".$id."'";
+    /**
+     * @param string $name
+     * @param string $field
+     * @return $this
+     */
+    public function find($name, $field)
+    {
+
+        $query = 'SELECT * from '.$this->table." WHERE `$name` = '".$field."'";
         /** @var \mysqli_result $result */
         $result = $this->query($query);
         if ($result){

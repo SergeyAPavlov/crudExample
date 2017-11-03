@@ -58,6 +58,15 @@ class App extends Config
         return $this->connection;
     }
 
+    /**
+     * @return string
+     */
+    public function getSole()
+    {
+        return $this->sole;
+    }
+
+
     public function createEmptyTables()
     {
         $this->initBase();

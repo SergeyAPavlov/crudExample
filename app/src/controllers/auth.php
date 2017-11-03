@@ -7,13 +7,9 @@
  */
 
 namespace crudExample\controllers;
-
-
 use crudExample\Controller;
-use crudExample\View;
 
 class auth extends Controller
 {
-
 
 }
