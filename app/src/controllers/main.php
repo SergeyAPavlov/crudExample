@@ -15,15 +15,7 @@ use crudExample\View;
 
 class main extends Controller
 {
-    public function requestRoute()
-    {
-        if (empty($this->route)){
-            $this->route = (new Router($this->app))->rout;
-        }
 
-        return $this;
-
-    }
     public function requestParams()
     {
         Authorize::check($this->app);

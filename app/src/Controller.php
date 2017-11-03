@@ -36,8 +36,14 @@ abstract class Controller
 
     public function requestRoute()
     {
+        if (empty($this->route)){
+            $this->route = (new Router($this->app))->rout;
+        }
+
         return $this;
+
     }
+
     public function requestParams()
     {
         return $this;
@@ -46,9 +52,10 @@ abstract class Controller
     {
         return $this;
     }
+
     public function requestView()
     {
-        return $this;
+        return View::prepare($this->app, $this->route, $this->data);
     }
 
     public function requestAll()

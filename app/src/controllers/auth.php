@@ -15,8 +15,5 @@ use crudExample\View;
 class auth extends Controller
 {
 
-    public function requestView()
-    {
-        return View::prepare($this->app, 'auth', $this->params);
-    }
+
 }
