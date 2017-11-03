@@ -6,16 +6,21 @@
  * Time: 13:41
  */
 
-use crudExample\view\Loader;
+use crudExample\View;
 use PHPUnit\Framework\TestCase;
 require_once ("../../vendor/autoload.php");
-class LoaderTest extends TestCase
+class ViewTest extends TestCase
 {
 
     public function testIt()
     {
         $app = new crudExample\App();
         $app->init();
-        $load = new Loader($app, 'test', ['t1'=>'поле']);
+        View::display($app, 'test', ['t1'=>'поле']);
+        $text = View::prepare($app, 'test', ['t1'=>'поле']);
+        $this->assertEquals('Пробный текст поле
+
+
+', $text);
     }
 }
