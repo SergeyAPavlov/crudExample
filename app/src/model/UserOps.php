@@ -169,6 +169,8 @@ class UserOps
     {
         if (empty($condition)) {
             $condition = '1=1';
+        } else {
+            $condition = '1=1' . $condition;
         }
         $query = 'SELECT * from '.$this->table." WHERE ".$condition;
         /** @var \mysqli_result $result */

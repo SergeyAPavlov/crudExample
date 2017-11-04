@@ -1,17 +1,56 @@
-Список юзеров
-<?php
-    //print_r($table);
-    $text = '<table>';
+<h3>Список пользователей</h3>
+
+<form name="form_id" method="post" action="">
+    <table cellpadding="2" cellspacing="2" border="1">
+        <tr>
+            <td>id</td>
+            <td>логин</td>
+            <td>пароль</td>
+            <td>ФИО</td>
+            <td>email</td>
+            <td>Роль</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td>&nbsp;</td>
+            <td><input type="checkbox" name="clogin" <?= (!empty($form['clogin']) ? 'checked' : '') ?>></td>
+            <td>&nbsp;</td>
+            <td><input type="checkbox" name="cfio" <?= (!empty($form['cfio']) ? 'checked' : '') ?>></td>
+            <td>&nbsp;</td>
+            <td><input type="checkbox" name="crights" <?= (!empty($form['crights']) ? 'checked' : '') ?>></td>
+            <td><b>&lt;=</b> Сортировать по полю</td>
+            <td rowspan="2"><input type="submit" name="Submit" value="Submit"></td>
+        </tr>
+        <tr>
+            <td>&nbsp;</td>
+            <td><input name="login" type="text" size="32"
+                       value="<?= $form['login'] ?>"></td>
+            <td>&nbsp;</td>
+            <td><input name="fio" type="text" size="64"
+                       value="<?= $form['fio'] ?>"></td>
+            <td>&nbsp;</td>
+            <td><input name="rights" type="text" size="4"
+                       value="<?= $form['rights'] ?>"></td>
+            <td><b>&lt;=</b> Фильтровать по полю</td>
+
+        </tr>
+        <tr>
+            <?php
+
     foreach ($table as $user){
-        $text .= "<tr>";
         foreach ($user as $name => $field) {
-            $text .= '<td>'.$field.'</td>';
+            ?>
+            <td><?= $field ?></td>
+            <?php
 
         }
-        $text .= '<td><a href = /update?id='.$user['id'].'>редактировать</a></td>';
-        $text .= '<td><a href = /delete?id=' . $user['id'] . '>удалить</a></td>';
-        $text .= "</tr>";
+            ?>
+            <td><a href=/update?id=<?= $user['id'] ?>>редактировать</a></td>
+            <td><a href=/delete?id=<?= $user['id'] ?>>удалить</a></td>
+        </tr><?php
     }
-    $text .= '</table>';
-$text .= '<br><a href="/create">создать пользователя</a>';
-    echo $text;
+        ?>
+    </table>
+</form>
+<br><a href="/create">создать пользователя</a>

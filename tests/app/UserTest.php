@@ -35,7 +35,7 @@ class UserTest extends TestCase
         $app = new crudExample\App();
         $app->initBase();
         $user = new UserOps($app);
-        $fields =  ["login"=>'user'.uniqid(), "password"=>"password", "fio"=>'Some FIO', "email"=>'test@test.ru', "rights"=>0];
+        $fields = ["login" => 'buser' . uniqid(), "password" => "password", "fio" => 'More Some FIO', "email" => 'rtest@test.ru', "rights" => 0];
         $create = $user->create($fields);
         $this->assertTrue($create->done);
     }
