@@ -1,0 +1,11 @@
+function validate(form_id, email) {
+    var reg = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
+    var address = document.forms[form_id].elements[email].value;
+    if (reg.test(address) == false) {
+        alert('Введите корректный e-mail');
+        return false;
+    }
+}
+/**
+ * Created by Sergey Pavlov on 04.11.2017.
+ */
