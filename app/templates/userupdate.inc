@@ -6,7 +6,7 @@ $text .= '<tr><td>id</td><td>Логин</td><td>Пароль</td><td>ФИО</td>
 
 $text .= "<tr>";
 foreach ($fields as $name => $field) {
-    if ($name == 'id' OR $name == 'rights') {
+    if ($name == 'id' OR $name == 'rights' OR $name == 'login') {
         $text .= '<td>' . $field . '</td>';
     } else {
         $text .= '<td><input type="text" name="' . $name . '" value="' . $field . '"></td>';

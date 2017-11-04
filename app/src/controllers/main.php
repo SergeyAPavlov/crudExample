@@ -42,7 +42,12 @@ class main extends Controller
             $rout = ($this->route == 'main'? 'list':$this->route);
             $role = ($this->app->role?'admin':'user');
             $controllerName = __NAMESPACE__.'\\'.$role.$rout;
-            $controller = new $controllerName($this->app, $role.$rout);
+            if (!class_exists($controllerName)) {
+                $controller = new none($this->app, 'none');
+            } else {
+                $controller = new $controllerName($this->app, $role . $rout);
+            }
+
             //echo '*sub:'.$role.$rout;
             $this->data['content'] = $controller->requestAll();
             $this->data['login'] = $this->app->login;

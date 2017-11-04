@@ -2,13 +2,15 @@
 /**
  * Created by PhpStorm.
  * User: Sergey Pavlov
- * Date: 03.11.2017
- * Time: 22:31
+ * Date: 05.11.2017
+ * Time: 0:44
  */
 
 namespace crudExample\controllers;
 
-class adminlist extends userlist
+use crudExample\Controller;
+
+class none extends Controller
 {
 
 }

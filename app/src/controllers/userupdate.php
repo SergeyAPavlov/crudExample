@@ -17,12 +17,18 @@ class userupdate extends Controller
     public function requestParams()
     {
         $this->data['userid'] = $_REQUEST['id'];
+        $base = new UserOps($this->app);
+        $fields = $base->read($this->data['userid'])->fields;
+        if ($fields['login'] != $this->app->login) {
+            header("Location:/none");
+            exit();
+        }
         if (isset ($_REQUEST['Submit'])) {
             $this->params = $_REQUEST;
             unset($this->params['Submit']);
             unset($this->params['rights']);
+            unset($this->params['login']);
 
-            $base = new UserOps($this->app);
             $base->fields = $this->params;
             $base->update();
         }

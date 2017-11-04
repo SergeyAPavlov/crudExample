@@ -5,7 +5,7 @@
         <tr>
             <td>id</td>
             <td>логин</td>
-            <td>пароль</td>
+            <td></td>
             <td>ФИО</td>
             <td>email</td>
             <td>Роль</td>
@@ -41,7 +41,7 @@
             foreach ($table as $user){
             foreach ($user as $name => $field) {
                 ?>
-                <td><?= $field ?></td>
+                <td><? if ($name != 'password') echo $field ?></td>
                 <?php
 
             }
@@ -51,6 +51,7 @@
             <td>
                 <?php
                 if ($user['login'] == $applogin) echo '<a href = /update?id=' . $user['id'] . '>редактировать</a>';
+                else echo '<a href = /read?id=' . $user['id'] . '>просмотреть</a>';
                 ?>
             </td>
         </tr><?php
