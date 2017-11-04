@@ -23,7 +23,7 @@ class main extends Controller
     }
     public function requestData()
     {
-        //echo '*main.requestData:'.$this->route;
+        //echo '*main.start:'.$this->route." - \n";
         if ($this->route == 'register'){
             $controller = new register($this->app, 'register');
             $controller->requestAll();
@@ -36,17 +36,15 @@ class main extends Controller
         }
         if (!$this->app->logged){
             $controller = new auth($this->app, 'auth');
-            //echo '*controller.auth';
             $this->data['content'] = $controller->requestAll();
         }
         else {
             $rout = ($this->route == 'main'? 'list':$this->route);
             $role = ($this->app->role?'admin':'user');
             $controllerName = __NAMESPACE__.'\\'.$role.$rout;
-            //var_dump ($this->app);
             $controller = new $controllerName($this->app, $role.$rout);
+            //echo '*sub:'.$role.$rout;
             $this->data['content'] = $controller->requestAll();
-            //echo $this->data['content'];
         }
         return $this;
     }
