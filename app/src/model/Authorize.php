@@ -26,6 +26,7 @@ class Authorize
                 $hash = md5($login.$role.$expires.$app->getSole());
                 if ( $auth == $hash){
                     $app->logged = true;
+                    $app->login = $login;
                     $app->role = $role;
                     return true;
                 }

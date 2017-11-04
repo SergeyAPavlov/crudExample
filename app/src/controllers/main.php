@@ -45,6 +45,7 @@ class main extends Controller
             $controller = new $controllerName($this->app, $role.$rout);
             //echo '*sub:'.$role.$rout;
             $this->data['content'] = $controller->requestAll();
+            $this->data['login'] = $this->app->login;
         }
         return $this;
     }

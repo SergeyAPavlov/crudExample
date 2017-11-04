@@ -16,6 +16,7 @@ class App extends Config
     private $connection;
     public $root;
 
+    public $login;
     public $logged;
     public $role;
 
