@@ -78,4 +78,14 @@ class UserTest extends TestCase
         $this->assertTrue($user->done);
 
     }
+
+    public function testlistFields()
+    {
+        $app = new crudExample\App();
+        $app->initBase();
+        $user = new UserOps($app);
+        $table = $user->listFields();
+        $this->assertTrue($user->done);
+
+    }
 }

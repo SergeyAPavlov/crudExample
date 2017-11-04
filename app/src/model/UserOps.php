@@ -181,6 +181,19 @@ class UserOps
         return $table;
     }
 
+    /**
+     * @return []
+     */
+    public function listFields()
+    {
+        $query = 'SHOW FIELDS FROM ' . $this->table;
+        /** @var \mysqli_result $result */
+        $result = $this->query($query);
+        while ($fields = $result->fetch_assoc()) {
+            $this->fields[] = $fields['Field'];
+        }
+        return $this->fields;
+    }
 
 
 }

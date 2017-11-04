@@ -12,4 +12,5 @@
         $text .= "</tr>";
     }
     $text .= '</table>';
+$text .= '<br><a href="/create">создать пользователя</a>';
     echo $text;
