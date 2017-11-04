@@ -20,9 +20,9 @@ class adminlist extends Controller
         $this->params = $_REQUEST;
         if (isset ($_REQUEST['Submit'])) {
             unset($this->params['Submit']);
-            $this->data['form'] = $this->params;
 
         }
+        $this->data['form'] = $this->params;
         $this->data['applogin'] = $this->app->login;
         return $this;
     }
