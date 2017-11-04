@@ -23,20 +23,26 @@ class main extends Controller
     }
     public function requestData()
     {
-        echo '*main.requestData:'.$this->route;
+        //echo '*main.requestData:'.$this->route;
         if ($this->route == 'register'){
-            echo '*регистрация';
+            //echo '*регистрация';
+            $controller = new register($this->app, 'register');
+            $controller->requestAll();
             exit;
         }
         if (!$this->app->logged){
             $controller = new auth($this->app, 'auth');
-            echo '*controller.auth';
+            //echo '*controller.auth';
             $this->data['content'] = $controller->requestAll();
         }
         else {
-            $controllerName = $this->app->role.$this->route;
-            $controller = new $controllerName($this->app, $controllerName);
+            $rout = ($this->route == 'main'? 'list':$this->route);
+            $role = ($this->app->role?'admin':'user');
+            $controllerName = __NAMESPACE__.'\\'.$role.$rout;
+            //var_dump ($this->app);
+            $controller = new $controllerName($this->app, $role.$rout);
             $this->data['content'] = $controller->requestAll();
+            //echo $this->data['content'];
         }
         return $this;
     }

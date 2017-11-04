@@ -18,13 +18,15 @@ class Authorize
         $app->logged = false;
         if (!empty($_COOKIE)){
             try{
-                $login = $_COOKIE['login']['value'];
-                $role = $_COOKIE['role']['value'];
-                $expires = $_COOKIE['login']['expires'];
-                $auth = $_COOKIE['auth']['value'];
+                //var_dump($_COOKIE);
+                $login = $_COOKIE['login'];
+                $role = $_COOKIE['role'];
+                $expires = $_COOKIE['expires'];
+                $auth = $_COOKIE['auth'];
                 $hash = md5($login.$role.$expires.$app->getSole());
                 if ( $auth == $hash){
                     $app->logged = true;
+                    $app->role = $role;
                     return true;
                 }
             } catch (\Throwable $t){
@@ -42,20 +44,21 @@ class Authorize
             return false;
         }
         if ($base->fields['password'] == $password){
+            $app->role = $base->fields['rights'];
             return true;
         }
         return false;
 
     }
 
-    public static function setAuth(App $app, $login, $role)
+    public static function setAuth(App $app, $login)
     {
         $time = time();
         $expires = $time+60*60*24*30;
         setcookie("login", $login,  $expires);
-        setcookie("role", $role,  $expires);
-
-        $auth = md5($login.$role.$expires.$app->getSole());
+        setcookie("role", $app->role,  $expires);
+        setcookie("expires", $expires,  $expires);
+        $auth = md5($login.$app->role.$expires.$app->getSole());
         setcookie("auth", $auth, $expires);
 
     }
