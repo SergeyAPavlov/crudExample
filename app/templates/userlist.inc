@@ -1,7 +1,7 @@
 <h3>Список пользователей</h3>
 
 <form name="form_id" method="post" action="">
-    <table cellpadding="2" cellspacing="2" border="1">
+    <table class="table">
         <tr>
             <td>id</td>
             <td>логин</td>

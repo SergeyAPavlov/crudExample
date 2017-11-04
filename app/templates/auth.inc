@@ -1,9 +1,17 @@
 <form method="POST" action="/register" >
+    <table class="table">
+        <tr>
+            <td>Логин</td>
+            <td><input name="login" type="text"></td>
 
-    Логин <input name="login" type="text"><br>
+        <tr>
+            <td>Пароль</td>
+            <td><input name="password" type="password"><br></td>
+        </tr>
 
-    Пароль <input name="password" type="password"><br>
-
-    <input name="submit" type="submit" value="Войти">
-
+        <tr>
+            <td></td>
+            <td><input name="submit" type="submit" value="Войти"></td>
+        </tr>
+    </table>
 </form>

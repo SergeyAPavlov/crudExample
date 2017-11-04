@@ -1,7 +1,7 @@
 <h3>Редактирование</h3>
 <script src="/mailValid.js"></script>
 <?php
-$text = '<form name="form_id" method="post" action="" onsubmit="javascript:return validate(\'form_id\',\'email\')"><table>';
+$text = '<form name="form_id" method="post" action="" onsubmit="javascript:return validate(\'form_id\',\'email\')"><table class="table">';
 $text .= '<tr><td>id</td><td>Логин</td><td>Пароль</td><td>ФИО</td><td>email</td><td>права администратора</td></tr>';
 
 $text .= "<tr>";

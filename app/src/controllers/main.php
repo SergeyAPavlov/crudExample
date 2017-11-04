@@ -35,10 +35,12 @@ class main extends Controller
             exit;
         }
         if (!$this->app->logged){
+            $this->data['logged'] = false;
             $controller = new auth($this->app, 'auth');
             $this->data['content'] = $controller->requestAll();
         }
         else {
+            $this->data['logged'] = true;
             $rout = ($this->route == 'main'? 'list':$this->route);
             $role = ($this->app->role?'admin':'user');
             $controllerName = __NAMESPACE__.'\\'.$role.$rout;

@@ -1,7 +1,8 @@
 <h3>Список пользователей</h3>
 
 <form name="form_id" method="post" action="">
-    <table cellpadding="2" cellspacing="2" border="1">
+    <table class="table table-striped">
+        <thead>
         <tr>
             <td>id</td>
             <td>логин</td>
@@ -12,6 +13,8 @@
             <td>&nbsp;</td>
             <td>&nbsp;</td>
         </tr>
+
+
         <tr>
             <td>&nbsp;</td>
             <td><input type="checkbox" name="clogin" <?= (!empty($form['clogin']) ? 'checked' : '') ?>></td>
@@ -35,22 +38,25 @@
             <td><b>&lt;=</b> Фильтровать по полю</td>
 
         </tr>
+        </thead>
+        <tbody>
         <tr>
             <?php
 
-    foreach ($table as $user){
-        foreach ($user as $name => $field) {
-            ?>
-            <td><?= $field ?></td>
-            <?php
+            foreach ($table as $user){
+            foreach ($user as $name => $field) {
+                ?>
+                <td><?= $field ?></td>
+                <?php
 
-        }
+            }
             ?>
             <td><a href=/update?id=<?= $user['id'] ?>>редактировать</a></td>
             <td><a href=/delete?id=<?= $user['id'] ?>>удалить</a></td>
         </tr><?php
-    }
+        }
         ?>
+        <tbody>
     </table>
 </form>
-<br><a href="/create">создать пользователя</a>
+<a class="btn btn-primary" href="/create">создать пользователя</a><p></p>
