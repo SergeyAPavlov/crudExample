@@ -9,6 +9,7 @@
 
         }
         $text .= '<td><a href = /update?id='.$user['id'].'>редактировать</a></td>';
+        $text .= '<td><a href = /delete?id=' . $user['id'] . '>удалить</a></td>';
         $text .= "</tr>";
     }
     $text .= '</table>';

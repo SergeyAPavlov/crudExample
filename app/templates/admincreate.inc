@@ -1,4 +1,4 @@
-<h3>Редактирование</h3>
+<h3>Создание пользователя</h3>
 <script src="/mailValid.js"></script>
 <?php
 $text = '<form name="form_id" method="post" action="" onsubmit="javascript:return validate(\'form_id\',\'email\')"><table>';
