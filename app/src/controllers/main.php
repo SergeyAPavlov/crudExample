@@ -25,8 +25,12 @@ class main extends Controller
     {
         //echo '*main.requestData:'.$this->route;
         if ($this->route == 'register'){
-            //echo '*регистрация';
             $controller = new register($this->app, 'register');
+            $controller->requestAll();
+            exit;
+        }
+        if ($this->route == 'logout'){
+            $controller = new logout($this->app, 'logout');
             $controller->requestAll();
             exit;
         }

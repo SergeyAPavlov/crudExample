@@ -14,7 +14,7 @@ class Router
     public $rout;
     private $app;
 
-    public $routList = ['list', 'create','read', 'update', 'delete', 'register'];
+    public $routList = ['list', 'create','read', 'update', 'delete', 'register', 'logout'];
 
     public function __construct($app)
     {

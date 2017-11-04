@@ -63,5 +63,16 @@ class Authorize
 
     }
 
+    public static function removeAuth()
+    {
+        $time = time();
+        $expires = $time-3600;
+        setcookie("login", '',  $expires);
+        setcookie("role", '',  $expires);
+        setcookie("expires", '',  $expires);
+        setcookie("auth", '', $expires);
+
+    }
+
 
 }
