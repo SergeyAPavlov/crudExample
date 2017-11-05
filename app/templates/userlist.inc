@@ -25,13 +25,13 @@
         <tr>
             <td>&nbsp;</td>
             <td><input name="login" type="text" size="32"
-                       value="<?= $form['login'] ?>"></td>
+                       value="<?= (!empty($form['login']) ? $form['login'] : '') ?>"></td>
             <td>&nbsp;</td>
             <td><input name="fio" type="text" size="64"
-                       value="<?= $form['fio'] ?>"></td>
+                       value="<?= (!empty($form['fio']) ? $form['fio'] : '') ?>"></td>
             <td>&nbsp;</td>
             <td><input name="rights" type="text" size="4"
-                       value="<?= $form['rights'] ?>"></td>
+                       value="<?= (!empty($form['rights']) ? $form['rights'] : '') ?>"></td>
             <td><b>&lt;=</b> Фильтровать по полю</td>
 
         </tr>
