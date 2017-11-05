@@ -11,11 +11,20 @@ try {
 }
 if ($app) {
     if ($app->debug) {
+        $dump = '';
         $log = $app->log;
         foreach ($log as $record) {
             if ($record[2] >= $app->debug) {
+                echo "* * *<br>\n";
                 var_dump($record);
             }
+            ob_start();
+            var_dump($record);
+            $dump .= "\n" . ob_get_contents();
+            ob_end_clean();
+            file_put_contents('../log/log' . time(), $dump);
         }
+
     }
+
 }
