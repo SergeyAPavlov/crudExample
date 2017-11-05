@@ -20,6 +20,8 @@ class App extends Config
     public $logged;
     public $role;
 
+    public $log;
+
     public function init()
     {
 
@@ -81,4 +83,10 @@ class App extends Config
         return false;
 
     }
+
+    public function logIt($log, $type = '', $errorlevel = 0)
+    {
+        $this->log[] = [$log, $type, $errorlevel, time()];
+    }
+
 }

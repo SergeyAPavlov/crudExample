@@ -140,7 +140,7 @@ class UserOps
      */
     public function query($query)
     {
-        $this->log[] = ['query', $query];
+        $this->app->logIt($query, 'query', 0);
         $flagFail = false;
         try {
             $result = $this->db->query($query);
@@ -153,7 +153,9 @@ class UserOps
             $result = null;
             $this->done = false;
             $this->errors = $this->db->error_list;
-            $this->log[] = ['fail', $this->done, $this->errors, ($flagFail? $t : '')];
+            //$this->log[] = ['fail', $this->done, $this->errors, ($flagFail? $t : '')];
+            $this->app->logIt($this->errors, 'query_errors', 1);
+            if ($flagFail) $this->app->logIt($t, 'query_exeptions', 1);
         }
         else {
             $this->done = true;
