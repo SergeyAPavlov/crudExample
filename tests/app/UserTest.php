@@ -6,7 +6,7 @@
  * Time: 18:44
  */
 
-use crudExample\Model\UserOps;
+use crudExample\model\UserOps;
 use PHPUnit\Framework\TestCase;
 require_once ("../../vendor/autoload.php");
 

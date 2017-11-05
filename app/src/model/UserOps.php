@@ -6,14 +6,14 @@
  * Time: 17:57
  */
 
-namespace crudExample\Model;
+namespace crudExample\model;
 
 
 use crudExample\App;
 
 /**
  * Class UserOps
- * @package crudExample\Model
+ * @package crudExample\model
  */
 class UserOps
 {

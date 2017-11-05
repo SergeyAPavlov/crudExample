@@ -10,7 +10,7 @@ namespace crudExample\controllers;
 
 
 use crudExample\Controller;
-use crudExample\Model\UserOps;
+use crudExample\model\UserOps;
 
 class adminupdate extends Controller
 {
