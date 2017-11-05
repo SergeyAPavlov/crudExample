@@ -10,7 +10,7 @@ try {
     else echo $t->getMessage();
 }
 if ($app) {
-    if ($app->debug) {
+    if ($app->debug AND !empty($app->log)) {
         $dump = '';
         $log = $app->log;
         foreach ($log as $record) {
