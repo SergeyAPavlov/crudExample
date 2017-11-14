@@ -31,7 +31,9 @@ class App extends Config
     }
 
 
-
+    /**
+     * @return $this
+     */
     public function initBase()
     {
         if (is_null($this->connection)){
@@ -54,7 +56,7 @@ class App extends Config
     }
 
     /**
-     * @return mixed
+     * @return \mysqli
      */
     public function getConnection()
     {

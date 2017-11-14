@@ -23,4 +23,11 @@ class ViewTest extends TestCase
 
 ', $text);
     }
+
+    public function testSafeSql()
+    {
+        $safe = new SafeMySQL();
+        $this->assertTrue(is_object($safe));
+    }
+
 }

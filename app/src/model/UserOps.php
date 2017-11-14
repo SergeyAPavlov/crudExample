@@ -22,6 +22,7 @@ class UserOps
     public $errors;
     public $log;
 
+    /** @var \mysqli */
     private $db;
     private $app;
 
@@ -53,19 +54,36 @@ class UserOps
     /**
      * @param string $name
      * @param string $field
+     * @throws \Throwable
      * @return $this
      */
     public function find($name, $field)
     {
+        try {
+            $table = $this->table;
+            $this->done = false;
+            if (!ctype_alnum($table) OR !ctype_alnum($name)) {
+                Throw new \Exception('Имя поля или таблицы не является идентификатором');
+            }
+            $query = "SELECT * from $table WHERE $name=?";
+            /** @var /mysqli_stmt $stmt */
+            $stmt = $this->db->stmt_init();
+            $stmt->prepare($query);
+            $stmt->bind_param('i', $field);
+            $result = $stmt->execute() ? $stmt->get_result() : false;
+            if ($result) {
+                $fields = $result->fetch_assoc();
+                $this->fields = $fields;
+                $this->done = true;
+                return $this;
+            }
 
-        $query = 'SELECT * from '.$this->table." WHERE `$name` = '".$field."'";
-        /** @var \mysqli_result $result */
-        $result = $this->query($query);
-        if ($result){
-            $fields = $result->fetch_assoc();
-            $this->fields = $fields;
+        } catch (\Throwable $t) {
+            $message = $t->getMessage();
+            return $this;
         }
-        return $this;
+
+
 
     }
 
