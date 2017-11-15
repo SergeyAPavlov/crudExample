@@ -30,4 +30,16 @@ class ViewTest extends TestCase
         $this->assertTrue(is_object($safe));
     }
 
+    public function testSafeSqlInit()
+    {
+        $opt = array(
+            'host' => 'localhost',
+            'user' => 'crudTest',
+            'pass' => 'crudTest',
+            'db' => 'crudTest'
+        );
+        $safe = new SafeMySQL($opt);
+        $this->assertTrue(is_object($safe));
+    }
+
 }

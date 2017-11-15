@@ -88,4 +88,13 @@ class UserTest extends TestCase
         $this->assertTrue($user->done);
 
     }
+
+    public function testNewFind()
+    {
+        $app = new crudExample\App();
+        $app->initBase();
+        $user = new UserOps($app);
+        $find = $user->find2('login', 'admin');
+
+    }
 }

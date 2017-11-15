@@ -57,7 +57,7 @@ class UserOps
      * @throws \Throwable
      * @return $this
      */
-    public function find($name, $field)
+    public function find0($name, $field)
     {
         try {
             $table = $this->table;
@@ -85,6 +85,26 @@ class UserOps
 
 
 
+    }
+
+    public function find($name, $field)
+    {
+        $table = $this->table;
+        $this->done = false;
+        $opt = array(
+            'host' => 'localhost',
+            'user' => 'crudTest',
+            'pass' => 'crudTest',
+            'db' => 'crudTest'
+        );
+        $db = new \SafeMySQL($opt);
+        $query = "SELECT * from $table WHERE $name=?s";
+        $row = $db->getRow($query, $field);
+        if (is_array($row)) {
+            $this->done = true;
+            $this->fields = $row;
+        }
+        return $this;
     }
 
     /**
