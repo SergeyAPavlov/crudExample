@@ -8,7 +8,6 @@
 
 namespace crudExample\model;
 
-
 use crudExample\App;
 
 /**
@@ -57,35 +56,6 @@ class UserOps
      * @throws \Throwable
      * @return $this
      */
-    public function find0($name, $field)
-    {
-        try {
-            $table = $this->table;
-            $this->done = false;
-            if (!ctype_alnum($table) OR !ctype_alnum($name)) {
-                Throw new \Exception('Имя поля или таблицы не является идентификатором');
-            }
-            $query = "SELECT * from $table WHERE $name=?";
-            /** @var /mysqli_stmt $stmt */
-            $stmt = $this->db->stmt_init();
-            $stmt->prepare($query);
-            $stmt->bind_param('i', $field);
-            $result = $stmt->execute() ? $stmt->get_result() : false;
-            if ($result) {
-                $fields = $result->fetch_assoc();
-                $this->fields = $fields;
-                $this->done = true;
-                return $this;
-            }
-
-        } catch (\Throwable $t) {
-            $message = $t->getMessage();
-            return $this;
-        }
-
-
-
-    }
 
     public function find($name, $field)
     {
