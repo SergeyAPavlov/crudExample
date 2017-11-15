@@ -14,6 +14,7 @@ class App extends Config
 
     /** @var  \mysqli */
     private $connection;
+    private $safe;
     public $root;
 
     public $login;
@@ -27,6 +28,7 @@ class App extends Config
 
         $this->root = Helper::sliceDir(__DIR__, 2);
         $this->initBase();
+        $this->initSafe();
         return $this;
     }
 
@@ -56,12 +58,43 @@ class App extends Config
     }
 
     /**
+     * @return $this
+     * @throws \Exception
+     */
+    public function initSafe()
+    {
+        if (is_null($this->safe)) {
+            $opt = array(
+                'host' => $this->dbaseHost,
+                'user' => $this->dbaseUser,
+                'pass' => $this->dbasePassword,
+                'db' => $this->dbaseName
+            );
+            $this->safe = new \SafeMySQL($opt);
+            if (empty($this->safe)) {
+                Throw new \Exception('подключение к базе не удалось');
+            }
+        }
+        return $this;
+    }
+
+    /**
      * @return \mysqli
      */
     public function getConnection()
     {
         return $this->connection;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getSafe()
+    {
+        return $this->safe;
+    }
+
+
 
     /**
      * @return string

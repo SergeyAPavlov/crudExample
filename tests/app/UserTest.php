@@ -23,7 +23,7 @@ class UserTest extends TestCase
     public function testRead()
     {
         $app = new crudExample\App();
-        $app->initBase();
+        $app->init();
         $user = new UserOps($app);
         $fields = $user->read(1)->fields;
         $this->assertTrue($user->done);
@@ -33,7 +33,7 @@ class UserTest extends TestCase
     public function testCreate()
     {
         $app = new crudExample\App();
-        $app->initBase();
+        $app->init();
         $user = new UserOps($app);
         $fields = ["login" => 'buser' . uniqid(), "password" => "password", "fio" => 'More Some FIO', "email" => 'rtest@test.ru', "rights" => 0];
         $create = $user->create($fields);
@@ -43,7 +43,7 @@ class UserTest extends TestCase
     public function testFalseCreate()
     {
         $app = new crudExample\App();
-        $app->initBase();
+        $app->init();
         $user = new UserOps($app);
         $fields =  ["login"=>'user', "password"=>"password", "fio"=>'Some FIO', "email"=>'test@test.ru', "rights"=>0];
         $create = $user->create($fields);
@@ -53,7 +53,7 @@ class UserTest extends TestCase
     public function testUpdate()
     {
         $app = new crudExample\App();
-        $app->initBase();
+        $app->init();
         $user = new UserOps($app);
         $user->fields =  ['id'=>2, "login"=>'user'.uniqid(), "password"=>"password", "fio"=>'Some FIO', "email"=>'test@test.ru', "rights"=>0];
         $create = $user->update();
@@ -63,7 +63,7 @@ class UserTest extends TestCase
     public function testDelete()
     {
         $app = new crudExample\App();
-        $app->initBase();
+        $app->init();
         $user = new UserOps($app);
         $delete = $user->delete(6);
         $this->assertTrue($delete->done);
@@ -72,7 +72,7 @@ class UserTest extends TestCase
     public function testListTable()
     {
         $app = new crudExample\App();
-        $app->initBase();
+        $app->init();
         $user = new UserOps($app);
         $table = $user->listTable();
         $this->assertTrue($user->done);
@@ -82,7 +82,7 @@ class UserTest extends TestCase
     public function testlistFields()
     {
         $app = new crudExample\App();
-        $app->initBase();
+        $app->init();
         $user = new UserOps($app);
         $table = $user->listFields();
         $this->assertTrue($user->done);
@@ -92,9 +92,9 @@ class UserTest extends TestCase
     public function testNewFind()
     {
         $app = new crudExample\App();
-        $app->initBase();
+        $app->init();
         $user = new UserOps($app);
-        $find = $user->find2('login', 'admin');
-
+        $find = $user->find('login', 'admin');
+        $this->assertEquals($find->fields['login'], 'admin');
     }
 }

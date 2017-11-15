@@ -61,15 +61,10 @@ class UserOps
     {
         $table = $this->table;
         $this->done = false;
-        $opt = array(
-            'host' => 'localhost',
-            'user' => 'crudTest',
-            'pass' => 'crudTest',
-            'db' => 'crudTest'
-        );
-        $db = new \SafeMySQL($opt);
-        $query = "SELECT * from $table WHERE $name=?s";
-        $row = $db->getRow($query, $field);
+
+        $db = $this->app->getSafe();
+        $query = "SELECT * from $table WHERE ?n=?s";
+        $row = $db->getRow($query, $name, $field);
         if (is_array($row)) {
             $this->done = true;
             $this->fields = $row;
