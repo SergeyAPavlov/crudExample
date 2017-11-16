@@ -289,4 +289,13 @@ class UserOps
         return $table;
     }
 
+    public function listFO($orders = [], $softFields = [], $sharpFields = [])
+    {
+
+        $filter1 = $this->makeSoftFilter($softFields);
+        $filter2 = $this->makeSharpFilter($sharpFields);
+        return $this->listFiltered($orders, [$filter1, $filter2]);
+
+    }
+
 }

@@ -135,10 +135,30 @@ class UserTest extends TestCase
         $app->init();
         $user = new UserOps($app);
         $orders = ['login', 'fio', 'rights'];
-        $filters = [];
+
+        $fields = ['login' => 'user', 'fio' => 'Some'];
+        $filter1 = $user->makeSoftFilter($fields);
+        $fields = ['rights' => 0];
+        $filter2 = $user->makeSharpFilter($fields);
+        $filters = [$filter1, $filter2];
         $table = $user->listFiltered($orders, $filters);
 
-        //$this->assertTrue($user->done);
+        $this->assertEquals('password', $table[0]['password']);
+
+    }
+
+    public function testListFO()
+    {
+        $app = new crudExample\App();
+        $app->init();
+        $user = new UserOps($app);
+        $orders = ['login', 'fio', 'rights'];
+
+        $fields1 = ['login' => 'user', 'fio' => 'Some'];
+        $fields2 = ['rights' => 0];
+        $table = $user->listFO($orders, $fields1, $fields2);
+
+        $this->assertEquals('password', $table[0]['password']);
 
     }
 
