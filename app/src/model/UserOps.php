@@ -76,6 +76,7 @@ class UserOps
      * @param bool|array $fields
      * @return $this
      */
+
     public function create($fields = false)
     {
         if ($fields === false){
@@ -89,15 +90,24 @@ class UserOps
             $this->errors = 'Данные для создаваемого пользователя не заданы';
             return $this;
         }
-        $keys = array_keys($fields);
+        $db = $this->app->getSafe();
 
-        $query = 'INSERT INTO '.$this->table.' (`'.implode('`, `',$keys ).'`) '.
-        " VALUES ('".implode("', '",$fields )."'".')';
+        $sql = 'INSERT INTO ' . $this->table . ' SET ?u';
+        $db->query($sql, $fields);
 
-        $this->query($query);
+        $affected = $db->affectedRows();
+
+        if (empty($affected)) {
+            $this->done = false;
+            $this->errors = 'Запрос на создание пользователя не удался';
+        } else {
+            $this->done = true;
+        }
         return $this;
 
     }
+
+
     /**
      * @return $this
      */
@@ -106,19 +116,22 @@ class UserOps
 
         $fields = $this->fields;
         if (!is_array($fields)){
-            $this->done = false;
+            $this->done = null;
             $this->errors = 'Данные для обновляемого пользователя не заданы';
             return $this;
         }
 
-        $values = '';
-        foreach ($fields as $key=>$value){
-            $values .= "`$key`='$value',";
-        }
-        $values = mb_substr($values, 0, mb_strlen($values)-1 );
-        $query = 'UPDATE '.$this->table.' SET '.$values."WHERE id='".$fields['id']."'";
+        $db = $this->app->getSafe();
+        $sql = 'UPDATE ' . $this->table . ' SET ?u WHERE id = ?i';
+        $db->query($sql, $fields, $fields['id']);
+        $affected = $db->affectedRows();
 
-        $this->query($query);
+        if (empty($affected)) {
+            $this->done = null;
+            $this->errors = 'Запрос на обновление пользователя не удался';
+        } else {
+            $this->done = true;
+        }
         return $this;
 
     }
@@ -129,11 +142,17 @@ class UserOps
      */
     public function delete($id)
     {
-        $query = 'DELETE from '.$this->table." WHERE `id` = ".$id;
-        /** @var \mysqli_result $result */
-
-        $this->query($query);
+        $query = 'DELETE FROM ' . $this->table . " WHERE `id` = ?i";
+        $db = $this->app->getSafe();
+        $db->query($query, $id);
         $this->fields = null;
+        $affected = $db->affectedRows();
+        if (empty($affected)) {
+            $this->done = null;
+            $this->errors = 'Запрос на обновление пользователя не удался';
+        } else {
+            $this->done = true;
+        }
         return $this;
     }
 
@@ -194,13 +213,80 @@ class UserOps
     public function listFields()
     {
         $query = 'SHOW FIELDS FROM ' . $this->table;
+
+        $db = $this->app->getSafe();
         /** @var \mysqli_result $result */
-        $result = $this->query($query);
+        $result = $db->query($query);
         while ($fields = $result->fetch_assoc()) {
             $this->fields[] = $fields['Field'];
         }
+        $this->done = is_array($this->fields) AND !empty($this->fields);
         return $this->fields;
     }
 
+    public function makeSoftFilter($fields)
+    {
+        $where = '';
+        $db = $this->app->getSafe();
+        $qw = [];
+        foreach ($fields as $name => $value) {
+            $like = "%$value%";
+            $qw[] = $db->parse("?n LIKE ?s ", $name, $like);
+        }
+        if (count($qw)) $where = implode(' AND ', $qw);
+        return $where;
+    }
+
+    public function makeSharpFilter($fields)
+    {
+        $where = '';
+        $db = $this->app->getSafe();
+        $qw = [];
+        foreach ($fields as $name => $value) {
+            $qw[] = $db->parse("?n = ?s ", $name, $value);
+        }
+        if (count($qw)) $where = implode(' AND ', $qw);
+        return $where;
+    }
+
+    public function composeWhere($filters)
+    {
+        $res[0] = ' WHERE 1=1 ';
+        foreach ($filters as $filter) {
+            if (!empty($filter)) $res[] = $filter;
+        }
+        return implode(' AND ', $res);
+    }
+
+    public function composeOrder($orders)
+    {
+        $where = '';
+        $db = $this->app->getSafe();
+        $qw = [];
+        foreach ($orders as $value) {
+            $qw[] = $db->parse("?n", $value);
+        }
+        if (count($qw)) $where = implode(' AND ', $qw);
+        if ($where) $where = 'ORDER BY ' . $where;
+        return $where;
+    }
+
+    public function listFiltered($orders, $filters)
+    {
+        $db = $this->app->getSafe();
+
+        $where = $this->composeWhere($filters);
+        $order = $this->composeOrder($orders);
+
+        $query = 'SELECT * from ' . $this->table . $where . $order;
+        /** @var \mysqli_result $result */
+        $result = $db->query($query);
+        $table = [];
+        if (empty($result)) return null;
+        while ($row = $result->fetch_assoc()) {
+            $table[] = $row;
+        }
+        return $table;
+    }
 
 }

@@ -40,14 +40,20 @@ class UserTest extends TestCase
         $this->assertTrue($create->done);
     }
 
+
     public function testFalseCreate()
     {
         $app = new crudExample\App();
         $app->init();
         $user = new UserOps($app);
         $fields =  ["login"=>'user', "password"=>"password", "fio"=>'Some FIO', "email"=>'test@test.ru', "rights"=>0];
-        $create = $user->create($fields);
-        $this->assertFalse($create->done);
+        try {
+            $user->create($fields);
+        } catch (\Throwable $t) {
+            echo $t->getMessage();
+        }
+
+        $this->assertNull($user->done);
     }
 
     public function testUpdate()
@@ -65,7 +71,7 @@ class UserTest extends TestCase
         $app = new crudExample\App();
         $app->init();
         $user = new UserOps($app);
-        $delete = $user->delete(6);
+        $delete = $user->delete(24);
         $this->assertTrue($delete->done);
     }
 
@@ -97,4 +103,43 @@ class UserTest extends TestCase
         $find = $user->find('login', 'admin');
         $this->assertEquals($find->fields['login'], 'admin');
     }
+
+    public function testFilter()
+    {
+        $app = new crudExample\App();
+        $app->init();
+        $user = new UserOps($app);
+        $fields = ['login' => 'user', 'fio' => 'Ivanov N.N'];
+        $filter1 = $user->makeSoftFilter($fields);
+        $fields = ['rights' => 0];
+        $filter2 = $user->makeSharpFilter($fields);
+        $res = $user->composeWhere([$filter1, $filter2]);
+        $this->assertEquals('WHERE 1=1  AND `login` LIKE \'%user%\'  AND `fio` LIKE \'%Ivanov N.N%\'  AND `rights` = \'0\' ', $res);
+
+    }
+
+    public function testOrder()
+    {
+        $app = new crudExample\App();
+        $app->init();
+        $user = new UserOps($app);
+        $fields = ['login', 'fio', 'rights'];
+        $res = $user->composeOrder($fields);
+        $this->assertEquals('ORDER BY `login` AND `fio` AND `rights`', $res);
+
+    }
+
+    public function testListFiltered()
+    {
+        $app = new crudExample\App();
+        $app->init();
+        $user = new UserOps($app);
+        $orders = ['login', 'fio', 'rights'];
+        $filters = [];
+        $table = $user->listFiltered($orders, $filters);
+
+        //$this->assertTrue($user->done);
+
+    }
+
 }
