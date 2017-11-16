@@ -224,6 +224,10 @@ class UserOps
         return $this->fields;
     }
 
+    /**
+     * @param [] $fields
+     * @return string
+     */
     public function makeSoftFilter($fields)
     {
         $where = '';
@@ -237,6 +241,10 @@ class UserOps
         return $where;
     }
 
+    /**
+     * @param [] $fields
+     * @return string
+     */
     public function makeSharpFilter($fields)
     {
         $where = '';
@@ -249,6 +257,10 @@ class UserOps
         return $where;
     }
 
+    /**
+     * @param string[] $filters
+     * @return string
+     */
     public function composeWhere($filters)
     {
         $res[0] = ' WHERE 1=1 ';
@@ -258,6 +270,10 @@ class UserOps
         return implode(' AND ', $res);
     }
 
+    /**
+     * @param string[] $orders
+     * @return string
+     */
     public function composeOrder($orders)
     {
         $where = '';
@@ -271,6 +287,12 @@ class UserOps
         return $where;
     }
 
+
+    /**
+     * @param [] $orders
+     * @param [] $filters
+     * @return array|null
+     */
     public function listFiltered($orders, $filters)
     {
         $db = $this->app->getSafe();

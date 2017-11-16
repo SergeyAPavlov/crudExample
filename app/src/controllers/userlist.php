@@ -31,26 +31,21 @@ class userlist extends Controller
     public function requestData()
     {
         $orders = [];
-        $filters = [];
+        $fields1 = [];
+        $fields2 = [];
         foreach ($this->params as $name => $field) {
-            if ($name == 'clogin') $orders[] = '`login`';
-            if ($name == 'cfio') $orders[] = '`fio`';
-            if ($name == 'crights') $orders[] = '`rights`';
-            if ($name == 'login' AND !empty($field)) $filters[] = "`login` LIKE '%$field%'";
-            if ($name == 'fio' AND !empty($field)) $filters[] = "`fio` LIKE '%$field%'";
+            if ($name == 'clogin') $orders[] = 'login';
+            if ($name == 'cfio') $orders[] = 'fio';
+            if ($name == 'crights') $orders[] = 'rights';
+            if ($name == 'login' AND !empty($field)) $fields1['login'] = $field;
+            if ($name == 'fio' AND !empty($field)) $fields1['fio'] = $field;
             if ($name == 'rights' AND ($field != '')) {
-                $filters[] = "`rights`='$field'";
+                $fields2['rights'] = $field;
             }
         }
-        $order = implode(' AND ', $orders);
-        if (!empty($order)) $order = ' ORDER BY ' . $order;
-        $filter = implode(' AND ', $filters);
-        if (!empty($filter)) $filter = ' AND ' . $filter;
-        $condition = $filter . $order;
-        $this->data['condition'] = $condition;
 
         $base = new UserOps($this->app);
-        $table = $base->listTable($condition);
+        $table = $base->listFO($orders, $fields1, $fields2);
         $this->data['table'] = $table;
         return $this;
     }
