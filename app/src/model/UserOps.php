@@ -20,9 +20,6 @@ class UserOps
     public $done;
     public $errors;
     public $log;
-
-    /** @var \mysqli */
-    private $db;
     private $app;
 
     public $table;
@@ -36,7 +33,6 @@ class UserOps
     public function __construct(App $app)
     {
         $this->app = $app;
-        $this->db = $app->getConnection();
         $this->table = $app->usersTable;
 
     }
@@ -154,57 +150,6 @@ class UserOps
             $this->done = true;
         }
         return $this;
-    }
-
-    /**
-     * @param string $query
-     * @return null|\mysqli_result
-     */
-    public function query($query)
-    {
-        $this->app->logIt($query, 'query', 0);
-        $flagFail = false;
-        try {
-            $result = $this->db->query($query);
-        } catch (\Throwable $t)
-        {
-            $flagFail = true;
-        }
-
-        if (empty($result) OR !empty($flagFail)){
-            $result = null;
-            $this->done = false;
-            $this->errors = $this->db->error_list;
-            //$this->log[] = ['fail', $this->done, $this->errors, ($flagFail? $t : '')];
-            $this->app->logIt($this->errors, 'query_errors', 1);
-            if ($flagFail) $this->app->logIt($t, 'query_exeptions', 1);
-        }
-        else {
-            $this->done = true;
-        }
-        return $result;
-    }
-
-    /**
-     * @param string $condition
-     * @return array
-     */
-    public function listTable($condition = '')
-    {
-        if (empty($condition)) {
-            $condition = '1=1';
-        } else {
-            $condition = '1=1' . $condition;
-        }
-        $query = 'SELECT * from '.$this->table." WHERE ".$condition;
-        /** @var \mysqli_result $result */
-        $result = $this->query($query);
-        $table = [];
-        if (empty($result)) return null;
-        while ($row = $result->fetch_assoc()){
-            $table[] = $row;
-        }
-        return $table;
     }
 
     /**
